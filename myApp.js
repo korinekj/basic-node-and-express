@@ -3,6 +3,15 @@ require("dotenv").config();
 let express = require("express");
 let app = express();
 
+//Logger middleware -> zavolá se při každém requestu na server
+app.use((req, res, next) => {
+  console.log(req.method + " " + req.url + " - " + req.ip);
+  next();
+});
+
+//Serve static assets (style.css ve složce public)
+app.use("/public", express.static(__dirname + "/public"));
+
 //Serve an html file
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/views/index.html");
@@ -16,8 +25,5 @@ app.get("/json", (req, res) => {
     res.json({ message: "Hello json" });
   }
 });
-
-//Serve static assets (style.css ve složce public)
-app.use("/public", express.static(__dirname + "/public"));
 
 module.exports = app;
