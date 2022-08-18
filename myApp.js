@@ -1,4 +1,5 @@
 require("dotenv").config();
+let bodyParser = require("body-parser");
 
 let express = require("express");
 let app = express();
@@ -45,5 +46,21 @@ app.get(
 app.get("/:word/echo", (req, res) => {
   res.json({ echo: req.params.word });
 });
+
+//Body-parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+
+//Get Query Parameter Input from the Client
+// route_path: '/library'
+// actual_request_URL: '/library?userId=546&bookId=6754'
+// req.query: {userId: '546', bookId: '6754'}
+app
+  .route("/name")
+  .get((req, res) => {
+    res.json({ name: req.query.first + " " + req.query.last });
+  })
+  .post((req, res) => {
+    res.json({ name: req.body.first + " " + req.body.last });
+  });
 
 module.exports = app;
